@@ -33,7 +33,7 @@ st.markdown(
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("rolling_features.csv")
+    df = pd.read_csv("dashboard_data.csv")
     
     # Convert date column
     df['Date'] = pd.to_datetime(df['Date'])
