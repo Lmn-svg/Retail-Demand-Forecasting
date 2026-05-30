@@ -437,8 +437,8 @@ with right_col:
         mode='lines',
         name=t("predicted_sales")
         )
-     )
-     fig_main.update_layout(
+    )
+    fig_main.update_layout(
         title=t("sales forecasting"),
         xaxis_title='Date',
         yaxis_title='Weekly_Sales',
