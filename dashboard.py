@@ -256,50 +256,43 @@ def train_model(df):
     split_index = int(len(df) * 0.8)
 
     X_train = X.iloc[:split_index]
-    X_test = X.iloc[split_index:]
+    X_test  = X.iloc[split_index:]
 
     y_train = y.iloc[:split_index]
-    y_test = y.iloc[split_index:]
+    y_test  = y.iloc[split_index:]
 
     model = RandomForestRegressor(
         n_estimators=100,
         random_state=42
     )
 
-    model.fit(
-        X_train,
-        y_train
-    )
+    model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
 
-# 计算 MAPE
     mape = mean_absolute_percentage_error(
-    y_test,
-    y_pred
+        y_test,
+        y_pred
     )
 
-# 使用 max(0, …) 确保即使 MAPE 很大也不会出现负 Accuracy
-accuracy = max(
-    0,
-    round((1 - mape) * 100, 1)
-)
+    accuracy = max(
+        0,
+        round((1 - mape) * 100, 1)
+    )
 
-# 保存预测值到 DataFrame
-  df['Predicted_Sales'] = model.predict(X)
+    df['Predicted_Sales'] = model.predict(X)
 
-# 特征重要性
-  importance_df = pd.DataFrame({
-    "Feature": feature_cols,
-    "Importance": model.feature_importances_
-})
+    importance_df = pd.DataFrame({
+        "Feature": feature_cols,
+        "Importance": model.feature_importances_
+    })
 
-  return (
-    df,
-    accuracy,
-    importance_df,
-    model
-)
+    return (
+        df,
+        accuracy,
+        importance_df,
+        model
+    )
 # ============================================
 # Sidebar Filters
 # ============================================
