@@ -293,8 +293,7 @@ importance_df = pd.DataFrame({
     "Feature": feature_cols,
     "Importance": model.feature_importances_
 })
-
-    return (
+return (
     df,
     accuracy,
     importance_df,
