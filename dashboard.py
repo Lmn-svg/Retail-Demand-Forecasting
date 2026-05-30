@@ -438,8 +438,6 @@ fig_main.add_trace(
         name=t("predicted_sales")
     )
 )
-    )
-
     fig_main.update_layout(
         title=t("sales forecasting"),
         xaxis_title='Date',
