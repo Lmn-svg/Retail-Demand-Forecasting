@@ -289,11 +289,15 @@ with left_col:
     )
 
     fig_top = px.bar(
-        top_stores,
-        x=t("store"),
-        y=t("Weekly_sales"),
-        title=t("top10")
-    )
+    top_stores,
+    x='Store',
+    y='Weekly_Sales',
+    title=t("top10"),
+    labels={
+        "Store": t("store"),
+        "Weekly_Sales": t("Weekly_sales")
+    }
+)
 
     st.plotly_chart(
         fig_top,
@@ -316,9 +320,13 @@ with left_col:
 
     fig_bottom = px.bar(
         bottom_stores,
-        x=t("store"),
-        y=t("Weekly_sales"),
+        x='Store',
+        y='Weekly_Sales'
         title=t("bottom10")
+        labels={
+        "Store": t("store"),
+        "Weekly_Sales": t("Weekly_sales")
+    }
     )
 
     st.plotly_chart(
