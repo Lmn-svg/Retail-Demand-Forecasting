@@ -535,7 +535,7 @@ fig_holiday = px.bar(
     holiday_df,
     x='IsHoliday',
     y='Weekly_Sales',
-    title=t("Average Sales: Holiday vs Non-Holiday"),
+    title=t("average sales: holiday vs nonholiday"),
     labels={
     "Weekly_Sales": t("Weekly sales")
         }
