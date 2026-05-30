@@ -532,8 +532,6 @@ fig_holiday = px.bar(
         "Weekly_Sales": t("Weekly sales")
     }
 )
-    
-)
 
 st.plotly_chart(
     fig_holiday,
