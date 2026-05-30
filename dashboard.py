@@ -223,15 +223,17 @@ st.markdown(t(
 
 @st.cache_data
 def load_data():
+
     df = pd.read_csv("dashboard_data.csv")
-    
-    # Convert date column
-    df['Date'] = pd.to_datetime(df['Date'])
-    
+
+    df['Date'] = pd.to_datetime(
+        df['Date']
+    )
+
     return df
 
-df = load_data()
 
+df = load_data()
 # ============================================
 # Train Model
 # ============================================
@@ -251,24 +253,32 @@ def train_model(df):
     ]
 
     X = df[feature_cols]
+
     y = df['Weekly_Sales']
 
-    split_index = int(len(df) * 0.8)
+    split_index = int(
+        len(df) * 0.8
+    )
 
     X_train = X.iloc[:split_index]
-    X_test  = X.iloc[split_index:]
+    X_test = X.iloc[split_index:]
 
     y_train = y.iloc[:split_index]
-    y_test  = y.iloc[split_index:]
+    y_test = y.iloc[split_index:]
 
     model = RandomForestRegressor(
         n_estimators=100,
         random_state=42
     )
 
-    model.fit(X_train, y_train)
+    model.fit(
+        X_train,
+        y_train
+    )
 
-    y_pred = model.predict(X_test)
+    y_pred = model.predict(
+        X_test
+    )
 
     mape = mean_absolute_percentage_error(
         y_test,
@@ -277,10 +287,15 @@ def train_model(df):
 
     accuracy = max(
         0,
-        round((1 - mape) * 100, 1)
+        round(
+            (1 - mape) * 100,
+            1
+        )
     )
 
-    df['Predicted_Sales'] = model.predict(X)
+    df['Predicted_Sales'] = (
+        model.predict(X)
+    )
 
     importance_df = pd.DataFrame({
         "Feature": feature_cols,
@@ -293,21 +308,25 @@ def train_model(df):
         importance_df,
         model
     )
+    df, forecast_accuracy, importance_df, model = (
+    train_model(df)
+)
 # ============================================
 # Sidebar Filters
 # ============================================
 
-st.sidebar.header(t("filters"))
+st.sidebar.header(
+    t("filters")
+)
 
-# Store filter
 selected_store = st.sidebar.multiselect(
     t("select_store"),
     sorted(df['Store'].unique()),
     default=sorted(df['Store'].unique())[:5]
 )
 
-# Date filter
 min_date = df['Date'].min()
+
 max_date = df['Date'].max()
 
 date_range = st.sidebar.date_input(
@@ -315,14 +334,14 @@ date_range = st.sidebar.date_input(
     [min_date, max_date]
 )
 
-# Sales threshold slider
 sales_threshold = st.sidebar.slider(
     t("minimum_sales"),
     min_value=0,
-    max_value=int(df['Weekly_Sales'].max()),
+    max_value=int(
+        df['Weekly_Sales'].max()
+    ),
     value=10000
 )
-
 # ============================================
 # Filter Dataset
 # ============================================
@@ -338,32 +357,47 @@ filtered_df = df[
 # KPI Calculations
 # ============================================
 
-total_sales = filtered_df['Weekly_Sales'].sum()
+total_sales = (
+    filtered_df['Weekly_Sales']
+    .sum()
+)
 
-forecast_sales = filtered_df['Predicted_Sales'].sum()
+forecast_sales = (
+    filtered_df['Predicted_Sales']
+    .sum()
+)
 
 sales_growth = (
     filtered_df['Weekly_Sales']
     .pct_change()
-    .mean() * 100
+    .mean()
+    * 100
 )
 
 if len(filtered_df) > 0:
+
     top_store = (
-        filtered_df.groupby('Store')['Weekly_Sales']
+        filtered_df
+        .groupby('Store')
+        ['Weekly_Sales']
         .sum()
         .idxmax()
     )
-else:
-    top_store = "N/A"
 
+else:
+
+    top_store = "N/A"
 # ============================================
 # KPI Section
 # ============================================
 
-st.subheader(t("kpi"))
+st.subheader(
+    t("kpi")
+)
 
-col1, col2, col3, col4, col5 = st.columns([2, 2, 1, 1, 1])
+col1, col2, col3, col4, col5 = st.columns(
+    [2, 2, 1, 1, 1]
+)
 
 col1.metric(
     t("total_sales"),
