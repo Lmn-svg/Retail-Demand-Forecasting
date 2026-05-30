@@ -157,54 +157,57 @@ left_col, right_col = st.columns([1, 2])
 with left_col:
 
     st.subheader("Top 10 Stores")
-     top_stores = (
-    filtered_df
-    .groupby('Store')['Weekly_Sales']
-    .sum()
-    .reset_index()
-    .sort_values(
-        by='Weekly_Sales',
-        ascending=False
+
+    top_stores = (
+        filtered_df
+        .groupby('Store')['Weekly_Sales']
+        .sum()
+        .reset_index()
+        .sort_values(
+            by='Weekly_Sales',
+            ascending=False
+        )
+        .head(10)
     )
-    .head(10)
-)
 
-fig_top = px.bar(
-    top_stores,
-    x='Store',
-    y='Weekly_Sales',
-    title='Top 10 Stores'
-)
-
-st.plotly_chart(
-    fig_top,
-    use_container_width=True
-)
-
-st.subheader("Bottom 10 Stores")
-
-bottom_stores = (
-    filtered_df
-    .groupby('Store')['Weekly_Sales']
-    .sum()
-    .reset_index()
-    .sort_values(
-        by='Weekly_Sales'
+    fig_top = px.bar(
+        top_stores,
+        x='Store',
+        y='Weekly_Sales',
+        title='Top 10 Stores'
     )
-    .head(10)
-)
 
-fig_bottom = px.bar(
-    bottom_stores,
-    x='Store',
-    y='Weekly_Sales',
-    title='Bottom 10 Stores'
-)
+    st.plotly_chart(
+        fig_top,
+        use_container_width=True
+    )
 
-st.plotly_chart(
-    fig_bottom,
-    use_container_width=True
-)
+    st.subheader("Bottom 10 Stores")
+
+    bottom_stores = (
+        filtered_df
+        .groupby('Store')['Weekly_Sales']
+        .sum()
+        .reset_index()
+        .sort_values(
+            by='Weekly_Sales',
+            ascending=True
+        )
+        .head(10)
+    )
+
+    fig_bottom = px.bar(
+        bottom_stores,
+        x='Store',
+        y='Weekly_Sales',
+        title='Bottom 10 Stores'
+    )
+
+    st.plotly_chart(
+        fig_bottom,
+        use_container_width=True
+    )
+
     st.subheader("Store Performance")
 
     store_sales = (
