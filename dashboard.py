@@ -89,6 +89,10 @@ translations = {
         "sales by store": "Sales by Store",
 
         "average sales: holiday vs nonholiday": "Average Sales: Holiday vs Non-Holiday",
+
+        "holiday_analysis": "Holiday Impact Analysis",
+        "holiday_type": "Holiday Type",
+        "weekly_sales": "Weekly Sales",
         
         "random forest feature importance": "Random Forest Feature Importance",
         "footer":
@@ -149,6 +153,10 @@ translations = {
         "sales by store": "店铺销售额",
 
         "average sales: holiday vs nonholiday":"平均销售额：假日与非假日",
+
+        "holiday_analysis": "节假日影响分析",
+        "holiday_type": "节假日类型",
+        "weekly_sales": "周销售额"，
 
         "random forest feature importance": "随机森林特征重要性",
         "footer":
@@ -493,7 +501,7 @@ st.plotly_chart(
 # Holiday Impact Analysis
 # ============================================
 
-st.subheader(t("holiday impact analysis"))
+st.subheader(t("holiday_analysis"))
 
 holiday_df = (
     filtered_df
@@ -502,9 +510,10 @@ holiday_df = (
     .reset_index()
 )
 
+# Language Translation
 if language == "中文":
 
-    holiday_df['IsHoliday'] = (
+    holiday_df['Holiday_Label'] = (
         holiday_df['IsHoliday']
         .replace({
             False: '非节假日',
@@ -514,7 +523,7 @@ if language == "中文":
 
 else:
 
-    holiday_df['IsHoliday'] = (
+    holiday_df['Holiday_Label'] = (
         holiday_df['IsHoliday']
         .replace({
             False: 'Non-Holiday',
@@ -522,15 +531,32 @@ else:
         })
     )
 
+# Holiday Impact Chart
 fig_holiday = px.bar(
     holiday_df,
-    x='IsHoliday',
+    x='Holiday_Label',
     y='Weekly_Sales',
-    title=t("average sales: holiday vs nonholiday"),
+    color='Holiday_Label',
+    title=t("holiday_analysis"),
     labels={
-        "IsHoliday": t("isholiday"),
-        "Weekly_Sales": t("Weekly_sales")
+        "Holiday_Label": t("holiday_type"),
+        "Weekly_Sales": t("weekly_sales")
     }
+)
+
+# Hover Information
+fig_holiday.update_traces(
+    hovertemplate=
+    f"{t('holiday_type')}: %{{x}}<br>"
+    f"{t('weekly_sales')}: %{{y:,.0f}}"
+    "<extra></extra>"
+)
+
+# Layout
+fig_holiday.update_layout(
+    showlegend=False,
+    xaxis_title=t("holiday_type"),
+    yaxis_title=t("weekly_sales")
 )
 
 st.plotly_chart(
