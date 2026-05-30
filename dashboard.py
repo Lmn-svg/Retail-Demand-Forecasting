@@ -371,7 +371,7 @@ else:
 
 st.subheader(t("kpi"))
 
-col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
+col1, col2, col3, col4, col5 = st.columns([2, 2, 1, 1, 1])
 
 col1.metric(
     t("total_sales"),
