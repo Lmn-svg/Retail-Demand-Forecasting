@@ -72,6 +72,10 @@ translations = {
 
         "business_rec": "Business Recommendations",
 
+        "average sales": "Average Monthly Sales",
+
+        "sales by store": "Sales by Store",
+        
         "footer":
         "Retail Demand Forecasting Dashboard\nPowered by Random Forest Forecasting Model"
     },
@@ -110,10 +114,14 @@ translations = {
 
         "holiday_analysis": "节假日影响分析",
 
+        "average sales": "月平均销售额",
+
         "performance_alert": "门店绩效预警",
 
         "business_rec": "商业建议",
 
+        "sales by store": "店铺销售额",
+        
         "footer":
         "零售需求预测仪表盘\n基于随机森林预测模型"
     }
@@ -303,7 +311,7 @@ with left_col:
         bottom_stores,
         x='Store',
         y='Weekly_Sales',
-        title='Bottom 10 Stores'
+        title=t("bottom10")
     )
 
     st.plotly_chart(
@@ -323,7 +331,7 @@ with left_col:
         store_sales,
         x='Store',
         y='Weekly_Sales',
-        title='Sales by Store'
+        title='Sales by store'
     )
 
     st.plotly_chart(
@@ -344,7 +352,7 @@ with left_col:
         x='Month',
         y='Weekly_Sales',
         markers=True,
-        title='Average Monthly Sales'
+        title=t("average sales")
     )
 
     st.plotly_chart(
@@ -358,7 +366,7 @@ with left_col:
 
 with right_col:
 
-    st.subheader("Actual vs Forecasted Sales")
+    st.subheader(t("forecast_chart"))
 
     forecast_df = filtered_df.copy()
 
