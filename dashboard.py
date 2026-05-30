@@ -232,8 +232,6 @@ def load_data():
 
 df = load_data()
 
-df = load_data()
-
 # ============================================
 # Train Model
 # ============================================
@@ -293,12 +291,18 @@ def train_model(df):
         "Importance": model.feature_importances_
     })
 
-    return (
-        df,
-        accuracy,
-        importance_df,
-        model
-    )
+return (
+    df,
+    accuracy,
+    importance_df,
+    model
+)
+
+# 调用模型
+df, forecast_accuracy, importance_df, model = (
+    train_model(df)
+)
+
 # ============================================
 # Sidebar Filters
 # ============================================
