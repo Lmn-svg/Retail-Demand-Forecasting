@@ -431,7 +431,7 @@ with right_col:
              "Date": t("date"),
              "Weekly_Sales": t("Weekly_sales")
              }
-)
+        )
     )
 
     fig_main.add_trace(
