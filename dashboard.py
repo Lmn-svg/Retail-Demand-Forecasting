@@ -33,8 +33,13 @@ with col_lang:
 translations = {
 
     "English": {
+        
 
-        "title": "Retail Demand Forecasting Dashboard",
+        "Introduction":
+        "This dashboard provides retail sales monitoring, forecasting insights, and business recommendations using the Random Forest forecasting model.",
+        
+        "title":
+        "Retail Demand Forecasting Dashboard",
 
         "description":
         "This dashboard provides retail sales monitoring, forecasting insights, and business recommendations using the Random Forest forecasting model.",
@@ -72,6 +77,9 @@ translations = {
     },
 
     "中文": {
+        
+        "Introduction":
+        "此仪表板使用随机森林预测模型提供零售销售监控、预测见解和业务建议。",
 
         "title": "零售需求预测仪表盘",
 
@@ -118,13 +126,13 @@ def t(key):
 
 st.title(t("title"))
 
-st.markdown(
+st.markdown(t(
     """
     This dashboard provides retail sales monitoring,
     forecasting insights, and business recommendations
     using the Random Forest forecasting model.
     """
-)
+))
 
 # ============================================
 # Load Dataset
