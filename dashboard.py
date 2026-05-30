@@ -76,9 +76,9 @@ translations = {
 
         "forecast_chart": "Actual vs Forecasted Sales",
 
-        "feature_importance": "Feature Importance",
+        "feature importance": "Feature Importance",
 
-        "holiday_analysis": "Holiday Impact Analysis",
+        "holiday impact analysis": "Holiday Impact Analysis",
 
         "performance_alert": "Store Performance Alert",
 
@@ -136,9 +136,9 @@ translations = {
 
         "forecast_chart": "实际销售与预测销售",
 
-        "feature_importance": "特征重要性",
+        "feature importance": "特征重要性",
 
-        "holiday_analysis": "节假日影响分析",
+        "holiday impact analysis": "节假日影响分析",
 
         "average sales": "月平均销售额",
 
@@ -452,7 +452,7 @@ with right_col:
 # Feature Importance
 # ============================================
 
-st.subheader("Feature Importance")
+st.subheader(t("feature importance"))
 
 importance_df = pd.DataFrame({
     'Feature': [
@@ -493,7 +493,7 @@ st.plotly_chart(
 # Holiday Impact Analysis
 # ============================================
 
-st.subheader("Holiday Impact Analysis")
+st.subheader(t("holiday impact analysis"))
 
 holiday_df = (
     filtered_df
@@ -528,7 +528,6 @@ fig_holiday = px.bar(
     y='Weekly_Sales',
     title=t("holiday_analysis"),
     labels={
-    "IsHoliday": t("isholiday"),
     "Weekly_Sales": t("Weekly sales")
         }
 )
@@ -538,7 +537,6 @@ fig_holiday = px.bar(
     y='Weekly_Sales',
     title=t("Average Sales: Holiday vs Non-Holiday"),
     labels={
-    "IsHoliday": t("isholiday"),
     "Weekly_Sales": t("Weekly sales")
         }
 )
@@ -550,7 +548,7 @@ st.plotly_chart(
 # ============================================
 # Recommendations Section
 # ============================================
-st.subheader("Store Performance Alert")
+st.subheader(t("performance_alert"))
 
 current_sales = (
     filtered_df['Weekly_Sales']
@@ -581,7 +579,7 @@ else:
     st.error(
         "🔴 Critical Alert: Sales are significantly below expected levels."
     )
-st.subheader("Business Recommendations")
+st.subheader(t("business_rec"))
 
 # Recommendation logic
 avg_sales = filtered_df['Weekly_Sales'].mean()
