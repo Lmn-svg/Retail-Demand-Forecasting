@@ -527,18 +527,14 @@ fig_holiday = px.bar(
     x='IsHoliday',
     y='Weekly_Sales',
     title=t("holiday_analysis"),
-    labels={
-    "Weekly_Sales": t("Weekly sales")
-        }
+    
 )
 fig_holiday = px.bar(
     holiday_df,
     x='IsHoliday',
     y='Weekly_Sales',
     title=t("average sales: holiday vs nonholiday"),
-    labels={
-    "Weekly_Sales": t("Weekly sales")
-        }
+    
 )
 
 st.plotly_chart(
