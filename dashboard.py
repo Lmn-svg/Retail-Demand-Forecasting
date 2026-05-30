@@ -156,7 +156,7 @@ translations = {
 
         "holiday_analysis": "节假日影响分析",
         "holiday_type": "节假日类型",
-        "weekly_sales": "周销售额"，
+        "weekly_sales": "周销售额",
 
         "random forest feature importance": "随机森林特征重要性",
         "footer":
