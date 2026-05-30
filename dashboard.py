@@ -321,7 +321,7 @@ with left_col:
     fig_bottom = px.bar(
         bottom_stores,
         x='Store',
-        y='Weekly_Sales'
+        y='Weekly_Sales',
         title=t("bottom10")
         labels={
         "Store": t("store"),
