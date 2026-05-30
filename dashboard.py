@@ -346,35 +346,23 @@ filtered_df = df[
 # KPI Calculations
 # ============================================
 
-forecast_sales = (
-    filtered_df['Predicted_Sales']
-    .sum()
-)
-forecast_sales = (
-    filtered_df['Predicted_Sales']
-    .mean()
-)
+total_sales = filtered_df['Weekly_Sales'].sum()
+
+forecast_sales = filtered_df['Predicted_Sales'].sum()
 
 sales_growth = (
-    filtered_df['Weekly_Sales'].pct_change().mean() * 100
+    filtered_df['Weekly_Sales']
+    .pct_change()
+    .mean() * 100
 )
-
-forecast_accuracy = round(
-    forecast_accuracy,
-    1
-)
-
 
 if len(filtered_df) > 0:
-
     top_store = (
         filtered_df.groupby('Store')['Weekly_Sales']
         .sum()
         .idxmax()
     )
-
 else:
-
     top_store = "N/A"
 
 # ============================================
