@@ -441,11 +441,7 @@ with right_col:
     fig_main.update_layout(
         title=t("sales forecasting"),
         xaxis_title='Date',
-        yaxis_title='Weekly_Sales',
-        labels={
-        "Date": t("date"),
-        "Weekly_Sales": t("Weekly sales")
-        }
+        yaxis_title='Weekly_Sales',  
     )
 
     st.plotly_chart(
