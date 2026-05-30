@@ -362,42 +362,6 @@ st.plotly_chart(
     fig_holiday,
     use_container_width=True
 )
-
-fig_holiday = px.bar(
-    holiday_sales,
-    x='IsHoliday',
-    y='Weekly_Sales',
-    title='Average Sales: Holiday vs Non-Holiday'
-)
-
-st.plotly_chart(
-    fig_holiday,
-    use_container_width=True
-)
-# ============================================
-# Error Distribution
-# ============================================
-
-st.subheader("Prediction Error Distribution")
-
-filtered_df = filtered_df.copy()
-
-filtered_df['Prediction_Error'] = (
-    filtered_df['Weekly_Sales']
-    - filtered_df['rolling_mean_4']
-)
-fig_error = px.histogram(
-    filtered_df,
-    x='Prediction_Error',
-    nbins=50,
-    title='Residual Distribution'
-)
-
-st.plotly_chart(
-    fig_error,
-    use_container_width=True
-)
-
 # ============================================
 # Recommendations Section
 # ============================================
