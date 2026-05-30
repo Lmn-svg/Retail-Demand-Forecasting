@@ -33,6 +33,8 @@ with col_lang:
 translations = {
 
     "English": {
+
+        "isholiday":"IsHoliday",
         "date": "Date",
         "feature": "Feature",
         "importance": "Importance" ,
@@ -95,6 +97,7 @@ translations = {
 
     "中文": {
 
+        "isholiday":"是假期",
          "date": "日期",
         "feature": "特征",
         "importance": "重要性" ,
@@ -487,7 +490,7 @@ fig_importance = px.bar(
     importance_df,
     x='Feature',
     y='Importance',
-    title=t("random forest feature importance")66666666666666666666666666
+    title=t("random forest feature importance"),
     labels={
     "Feature": t("feature"),
     "Importance": t("importance")
@@ -536,13 +539,21 @@ fig_holiday = px.bar(
     holiday_df,
     x='IsHoliday',
     y='Weekly_Sales',
-    title=t("holiday_analysis")
+    title=t("holiday_analysis"),
+    labels={
+    "IsHoliday": t("isholiday"),
+    "Weekly_Sales": t("Weekly sales")
+        }
 )
 fig_holiday = px.bar(
     holiday_df,
     x='IsHoliday',
     y='Weekly_Sales',
-    title=t("Average Sales: Holiday vs Non-Holiday")6666666666666666666666666666666666
+    title=t("Average Sales: Holiday vs Non-Holiday"),
+    labels={
+    "IsHoliday": t("isholiday"),
+    "Weekly_Sales": t("Weekly sales")
+        }
 )
 
 st.plotly_chart(
