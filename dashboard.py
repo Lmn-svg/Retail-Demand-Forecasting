@@ -254,7 +254,7 @@ def train_model(df):
 
     y = df['Weekly_Sales']
 
-    X_train, X_test, y_train, y_test = split_index = int(len(df) * 0.8)
+    split_index = int(len(df) * 0.8)
 
     X_train = X.iloc[:split_index]
     X_test  = X.iloc[split_index:]
