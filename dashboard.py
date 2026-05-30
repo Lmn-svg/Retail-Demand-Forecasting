@@ -95,13 +95,22 @@ sales_growth = (
     filtered_df['Weekly_Sales'].pct_change().mean() * 100
 )
 
-forecast_accuracy = 100 - 15.7
-
-top_store = (
-    filtered_df.groupby('Store')['Weekly_Sales']
-    .sum()
-    .idxmax()
+forecast_accuracy = round(
+    100 - 15.7,
+    1
 )
+
+if len(filtered_df) > 0:
+
+    top_store = (
+        filtered_df.groupby('Store')['Weekly_Sales']
+        .sum()
+        .idxmax()
+    )
+
+else:
+
+    top_store = "N/A"
 
 # ============================================
 # KPI Section
@@ -145,11 +154,10 @@ left_col, right_col = st.columns([1, 2])
 # ============================================
 # Left Side Charts
 # ============================================
-
 with left_col:
-st.subheader("Top 10 Stores")
 
-top_stores = (
+    st.subheader("Top 10 Stores")
+     top_stores = (
     filtered_df
     .groupby('Store')['Weekly_Sales']
     .sum()
@@ -282,7 +290,21 @@ with right_col:
         fig_main,
         use_container_width=True
     )
+st.subheader("Holiday Impact Analysis")
 
+holiday_sales = (
+    filtered_df
+    .groupby('IsHoliday')['Weekly_Sales']
+    .mean()
+    .reset_index()
+)
+
+holiday_sales['IsHoliday'] = (
+    holiday_sales['IsHoliday']
+    .replace({
+        False: 'Non-Holiday',
+        True: 'Holiday'
+    })
     # ============================================
     # Feature Importance
     # ============================================
@@ -319,21 +341,7 @@ with right_col:
         fig_importance,
         use_container_width=True
     )
-st.subheader("Holiday Impact Analysis")
 
-holiday_sales = (
-    filtered_df
-    .groupby('IsHoliday')['Weekly_Sales']
-    .mean()
-    .reset_index()
-)
-
-holiday_sales['IsHoliday'] = (
-    holiday_sales['IsHoliday']
-    .replace({
-        False: 'Non-Holiday',
-        True: 'Holiday'
-    })
 )
 
 fig_holiday = px.bar(
@@ -353,11 +361,12 @@ st.plotly_chart(
 
 st.subheader("Prediction Error Distribution")
 
+filtered_df = filtered_df.copy()
+
 filtered_df['Prediction_Error'] = (
     filtered_df['Weekly_Sales']
     - filtered_df['rolling_mean_4']
 )
-
 fig_error = px.histogram(
     filtered_df,
     x='Prediction_Error',
