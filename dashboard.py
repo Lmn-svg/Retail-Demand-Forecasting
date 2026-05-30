@@ -363,8 +363,6 @@ st.plotly_chart(
     use_container_width=True
 )
 
-)
-
 fig_holiday = px.bar(
     holiday_sales,
     x='IsHoliday',
