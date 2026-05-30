@@ -422,15 +422,15 @@ with right_col:
     fig_main = go.Figure()
 
     fig_main.add_trace(
-    go.Scatter(
-       x=forecast_df['Date'],
-       y=forecast_df['Weekly_Sales'],
-       mode='lines',
-       name=t("actual_sales"),
-       labels={
-       "Date": t("date"),
-       "Weekly_Sales": t("Weekly_sales")
-       }
+        go.Scatter(
+             x=forecast_df['Date'],
+             y=forecast_df['Weekly_Sales'],
+             mode='lines',
+             name=t("actual_sales"),
+             labels={
+             "Date": t("date"),
+             "Weekly_Sales": t("Weekly_sales")
+             }
 )
     )
 
