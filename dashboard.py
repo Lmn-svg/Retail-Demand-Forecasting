@@ -14,10 +14,109 @@ st.set_page_config(
 )
 
 # ============================================
+# Language Selector
+# ============================================
+
+col_title, col_lang = st.columns([8,1])
+
+with col_lang:
+    language = st.selectbox(
+        "",
+        ["English", "中文"]
+    )
+
+
+# ============================================
+# Language Selector
+# ============================================
+
+translations = {
+
+    "English": {
+
+        "title": "Retail Demand Forecasting Dashboard",
+
+        "description":
+        "This dashboard provides retail sales monitoring, forecasting insights, and business recommendations using the Random Forest forecasting model.",
+
+        "filters": "Filters",
+        "select_store": "Select Store",
+        "select_date": "Select Date Range",
+        "minimum_sales": "Minimum Weekly Sales",
+
+        "kpi": "Key Performance Indicators",
+
+        "total_sales": "Total Sales",
+        "forecast_sales": "Forecasted Sales",
+        "sales_growth": "Sales Growth",
+        "forecast_accuracy": "Forecast Accuracy",
+        "top_store": "Top Store",
+
+        "top10": "Top 10 Stores",
+        "bottom10": "Bottom 10 Stores",
+        "store_performance": "Store Performance",
+        "monthly_sales": "Monthly Sales Trend",
+
+        "forecast_chart": "Actual vs Forecasted Sales",
+
+        "feature_importance": "Feature Importance",
+
+        "holiday_analysis": "Holiday Impact Analysis",
+
+        "performance_alert": "Store Performance Alert",
+
+        "business_rec": "Business Recommendations",
+
+        "footer":
+        "Retail Demand Forecasting Dashboard\nPowered by Random Forest Forecasting Model"
+    },
+
+    "中文": {
+
+        "title": "零售需求预测仪表盘",
+
+        "description":
+        "该仪表盘提供零售销售监控、销售预测分析以及基于随机森林模型的商业决策建议。",
+
+        "filters": "筛选条件",
+        "select_store": "选择门店",
+        "select_date": "选择日期范围",
+        "minimum_sales": "最低周销售额",
+
+        "kpi": "关键绩效指标",
+
+        "total_sales": "总销售额",
+        "forecast_sales": "预测销售额",
+        "sales_growth": "销售增长率",
+        "forecast_accuracy": "预测准确率",
+        "top_store": "最佳门店",
+
+        "top10": "销售额前10门店",
+        "bottom10": "销售额后10门店",
+        "store_performance": "门店表现",
+        "monthly_sales": "月度销售趋势",
+
+        "forecast_chart": "实际销售与预测销售",
+
+        "feature_importance": "特征重要性",
+
+        "holiday_analysis": "节假日影响分析",
+
+        "performance_alert": "门店绩效预警",
+
+        "business_rec": "商业建议",
+
+        "footer":
+        "零售需求预测仪表盘\n基于随机森林预测模型"
+    }
+}
+def t(key):
+    return translations[language].get(key, key)
+# ============================================
 # Dashboard Title
 # ============================================
 
-st.title("Retail Demand Forecasting Dashboard")
+st.title(t("title"))
 
 st.markdown(
     """
@@ -46,11 +145,11 @@ df = load_data()
 # Sidebar Filters
 # ============================================
 
-st.sidebar.header("Filters")
+st.sidebar.header(t("filters"))
 
 # Store filter
 selected_store = st.sidebar.multiselect(
-    "Select Store",
+    t("select_store"),
     sorted(df['Store'].unique()),
     default=sorted(df['Store'].unique())[:5]
 )
@@ -60,13 +159,13 @@ min_date = df['Date'].min()
 max_date = df['Date'].max()
 
 date_range = st.sidebar.date_input(
-    "Select Date Range",
+    t("select_date"),
     [min_date, max_date]
 )
 
 # Sales threshold slider
 sales_threshold = st.sidebar.slider(
-    "Minimum Weekly Sales",
+    t("minimum_sales"),
     min_value=0,
     max_value=int(df['Weekly_Sales'].max()),
     value=10000
@@ -116,32 +215,32 @@ else:
 # KPI Section
 # ============================================
 
-st.subheader("Key Performance Indicators")
+st.subheader(t("kpi"))
 
 col1, col2, col3, col4, col5 = st.columns(5)
 
 col1.metric(
-    "Total Sales",
+    t("total_sales"),
     f"${total_sales:,.0f}"
 )
 
 col2.metric(
-    "Forecasted Sales",
+    t("forecast_sales"),
     f"${forecast_sales:,.0f}"
 )
 
 col3.metric(
-    "Sales Growth",
+    t("sales_growth"),
     f"{sales_growth:.2f}%"
 )
 
 col4.metric(
-    "Forecast Accuracy",
+    t("forecast_accuracy"),
     f"{forecast_accuracy:.1f}%"
 )
 
 col5.metric(
-    "Top Store",
+    t("top_store"),
     f"Store {top_store}"
 )
 
@@ -156,7 +255,7 @@ left_col, right_col = st.columns([1, 2])
 # ============================================
 with left_col:
 
-    st.subheader("Top 10 Stores")
+    st.subheader(t("top10"))
 
     top_stores = (
         filtered_df
@@ -182,7 +281,7 @@ with left_col:
         use_container_width=True
     )
 
-    st.subheader("Bottom 10 Stores")
+    st.subheader(t("bottom10"))
 
     bottom_stores = (
         filtered_df
@@ -208,7 +307,7 @@ with left_col:
         use_container_width=True
     )
 
-    st.subheader("Store Performance")
+    st.subheader(t("store_performance"))
 
     store_sales = (
         filtered_df.groupby('Store')['Weekly_Sales']
@@ -228,7 +327,7 @@ with left_col:
         use_container_width=True
     )
 
-    st.subheader("Monthly Sales Trend")
+    st.subheader(t("monthly_sales"))
 
     monthly_sales = (
         filtered_df.groupby('Month')['Weekly_Sales']
@@ -346,8 +445,25 @@ holiday_df = (
 holiday_df['IsHoliday'] = (
     holiday_df['IsHoliday']
     .replace({
-        False: 'Non-Holiday',
-        True: 'Holiday'
+        if language == "中文":
+
+    holiday_df['IsHoliday'] = (
+        holiday_df['IsHoliday']
+        .replace({
+            False: '非节假日',
+            True: '节假日'
+        })
+    )
+
+else:
+
+    holiday_df['IsHoliday'] = (
+        holiday_df['IsHoliday']
+        .replace({
+            False: 'Non-Holiday',
+            True: 'Holiday'
+        })
+    )
     })
 )
 
@@ -435,9 +551,4 @@ if high_variance > 5000:
 
 st.markdown("---")
 
-st.markdown(
-    """
-    Retail Demand Forecasting Dashboard  
-    Powered by Random Forest Forecasting Model
-    """
-)
+st.markdown(t("footer"))
