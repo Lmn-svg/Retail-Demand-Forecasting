@@ -322,7 +322,7 @@ with left_col:
         bottom_stores,
         x='Store',
         y='Weekly_Sales',
-        title=t("bottom10")，
+        title=t("bottom10"),
         labels={
         "Store": t("store"),
         "Weekly_Sales": t("Weekly_sales")
