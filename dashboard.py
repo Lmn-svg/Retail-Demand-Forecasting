@@ -664,8 +664,8 @@ high_variance = filtered_df['rolling_std_4'].mean()
 
 if high_variance > 5000:
     st.info(
-        "Sales volatility is currently high. Monitor demand fluctuations carefully."
-    )
+    t("volatility_recommendation")
+  )
 
 # ============================================
 # Footer
