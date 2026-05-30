@@ -251,17 +251,16 @@ def train_model(df):
     ]
 
     X = df[feature_cols]
-
     y = df['Weekly_Sales']
 
     split_index = int(len(df) * 0.8)
 
     X_train = X.iloc[:split_index]
-    X_test  = X.iloc[split_index:]
+    X_test = X.iloc[split_index:]
 
     y_train = y.iloc[:split_index]
-    y_test  = y.iloc[split_index:]
- 
+    y_test = y.iloc[split_index:]
+
     model = RandomForestRegressor(
         n_estimators=100,
         random_state=42
@@ -280,12 +279,11 @@ def train_model(df):
     )
 
     forecast_accuracy = round(
-    mape * 100,
-    2
-)
-    df['Predicted_Sales'] = (
-        model.predict(X)
+        (1 - mape) * 100,
+        1
     )
+
+    df['Predicted_Sales'] = model.predict(X)
 
     importance_df = pd.DataFrame({
         "Feature": feature_cols,
@@ -293,25 +291,16 @@ def train_model(df):
     })
 
     return (
-    df,
-    accuracy,
-    importance_df,
-    model
-)
-
+        df,
+        forecast_accuracy,
+        importance_df,
+        model
+    )
 # 调用模型
 df, forecast_accuracy, importance_df, model = (
     train_model(df)
 )
 
-st.write("MAPE =", mape)
-
-st.write(
-    pd.DataFrame({
-        "Actual": y_test[:10],
-        "Predicted": y_pred[:10]
-    })
-)
 # ============================================
 # Sidebar Filters
 # ============================================
