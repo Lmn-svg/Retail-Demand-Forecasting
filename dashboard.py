@@ -232,72 +232,73 @@ def load_data():
 
 df = load_data()
 
+df = load_data()
+
 # ============================================
-# Random Forest Model Training
+# Train Model
 # ============================================
 
-feature_cols = [
-    'Store',
-    'Temperature',
-    'Fuel_Price',
-    'CPI',
-    'Unemployment',
-    'IsHoliday',
-    'rolling_mean_4',
-    'rolling_std_4'
-]
+@st.cache_resource
+def train_model(df):
 
-# 确保这些列存在
-feature_cols = [
-    col for col in feature_cols
-    if col in df.columns
-]
+    feature_cols = [
+        'Store',
+        'Temperature',
+        'Fuel_Price',
+        'CPI',
+        'Unemployment',
+        'IsHoliday',
+        'rolling_mean_4',
+        'rolling_std_4'
+    ]
 
-X = df[feature_cols]
+    X = df[feature_cols]
 
-y = df['Weekly_Sales']
+    y = df['Weekly_Sales']
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42
-)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.2,
+        random_state=42
+    )
 
-model = RandomForestRegressor(
-    n_estimators=100,
-    random_state=42
-)
+    model = RandomForestRegressor(
+        n_estimators=100,
+        random_state=42
+    )
 
-model.fit(
-    X_train,
-    y_train
-)
+    model.fit(
+        X_train,
+        y_train
+    )
 
-# Test prediction
-y_pred = model.predict(X_test)
+    y_pred = model.predict(X_test)
 
-mape = mean_absolute_percentage_error(
-    y_test,
-    y_pred
-)
+    mape = mean_absolute_percentage_error(
+        y_test,
+        y_pred
+    )
 
-forecast_accuracy = (
-    1 - mape
-) * 100
+    accuracy = (
+        1 - mape
+    ) * 100
 
-# Save predictions for dashboard
-df['Predicted_Sales'] = model.predict(X)
+    df['Predicted_Sales'] = (
+        model.predict(X)
+    )
 
-# Feature Importance
-importance_df = pd.DataFrame({
-    "Feature": feature_cols,
-    "Importance": model.feature_importances_
-}).sort_values(
-    "Importance",
-    ascending=False
-)
+    importance_df = pd.DataFrame({
+        "Feature": feature_cols,
+        "Importance": model.feature_importances_
+    })
 
+    return (
+        df,
+        accuracy,
+        importance_df,
+        model
+    )
 # ============================================
 # Sidebar Filters
 # ============================================
@@ -569,25 +570,6 @@ with right_col:
 # ============================================
 
 st.subheader(t("feature importance"))
-
-importance_df = pd.DataFrame({
-    'Feature': [
-        'rolling_mean_4',
-        'rolling_std_4',
-        'CPI',
-        'Unemployment',
-        'Fuel_Price',
-        'Temperature'
-    ],
-    'Importance': [
-        0.884,
-        0.101,
-        0.003,
-        0.002,
-        0.001,
-        0.001
-    ]
-})
 
 fig_importance = px.bar(
     importance_df,
