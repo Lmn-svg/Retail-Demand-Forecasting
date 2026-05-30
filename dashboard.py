@@ -127,11 +127,7 @@ def t(key):
 st.title(t("title"))
 
 st.markdown(t(
-    """
-    This dashboard provides retail sales monitoring,
-    forecasting insights, and business recommendations
-    using the Random Forest forecasting model.
-    """
+    """Introduction"""
 ))
 
 # ============================================
