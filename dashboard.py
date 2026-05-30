@@ -96,7 +96,25 @@ translations = {
         
         "random forest feature importance": "Random Forest Feature Importance",
         "footer":
-        "Retail Demand Forecasting Dashboard\nPowered by Random Forest Forecasting Model"
+        "Retail Demand Forecasting Dashboard\nPowered by Random Forest Forecasting Model",
+
+        "normal_performance":
+        "🟢 Normal Performance: Sales are within expected range.",
+
+        "warning_performance":
+        "🟡 Warning: Sales are below average and should be monitored.",
+
+       "critical_performance":
+       "🔴 Critical Alert: Sales are significantly below expected levels.",
+
+       "holiday_recommendation":
+       "Increase inventory levels before holiday periods due to higher expected demand.",
+
+      "store_recommendation":
+      "Store {store} shows relatively weak performance and may require promotional support.",
+
+     "volatility_recommendation":
+     "Sales volatility is currently high. Monitor demand fluctuations carefully.",
     },
 
     "中文": {
@@ -160,7 +178,24 @@ translations = {
 
         "random forest feature importance": "随机森林特征重要性",
         "footer":
-        "零售需求预测仪表盘\n基于随机森林预测模型"
+        "零售需求预测仪表盘\n基于随机森林预测模型",
+        "normal_performance":
+        "🟢 表现正常：销售额处于预期范围内。",
+
+        "warning_performance":
+        "🟡 警告：销售额低于平均水平，需要持续关注。",
+
+        "critical_performance":
+        "🔴 严重警报：销售额显著低于预期水平。",
+
+        "holiday_recommendation":
+        "由于节假日期间需求增加，建议提前提高库存水平。",
+
+       "store_recommendation":
+       "门店 {store} 表现相对较弱，建议开展促销活动以提升销售。",
+
+       "volatility_recommendation":
+       "当前销售波动较大，建议密切监控需求变化。",
     }
 }
 def t(key):
@@ -583,20 +618,20 @@ ratio = current_sales / overall_sales
 if ratio >= 0.95:
 
     st.success(
-        "🟢 Normal Performance: Sales are within expected range."
-    )
+    t("normal_performance")
+  )
 
 elif ratio >= 0.80:
 
     st.warning(
-        "🟡 Warning: Sales are below average and should be monitored."
-    )
+    t("warning_performance")
+  )
 
 else:
 
-    st.error(
-        "🔴 Critical Alert: Sales are significantly below expected levels."
-    )
+   st.error(
+    t("critical_performance")
+)
 st.subheader(t("business_rec"))
 
 # Recommendation logic
@@ -610,8 +645,8 @@ holiday_sales = (
 
 if holiday_sales > avg_sales:
     st.success(
-        "Increase inventory levels before holiday periods due to higher expected demand."
-    )
+    t("holiday_recommendation")
+)
 
 low_store = (
     filtered_df.groupby('Store')['Weekly_Sales']
@@ -620,7 +655,9 @@ low_store = (
 )
 
 st.warning(
-    f"Store {low_store} shows relatively weak performance and may require promotional support."
+    t("store_recommendation").format(
+        store=low_store
+    )
 )
 
 high_variance = filtered_df['rolling_std_4'].mean()
