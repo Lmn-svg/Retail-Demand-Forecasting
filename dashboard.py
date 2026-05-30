@@ -233,6 +233,72 @@ def load_data():
 df = load_data()
 
 # ============================================
+# Random Forest Model Training
+# ============================================
+
+feature_cols = [
+    'Store',
+    'Temperature',
+    'Fuel_Price',
+    'CPI',
+    'Unemployment',
+    'IsHoliday',
+    'rolling_mean_4',
+    'rolling_std_4'
+]
+
+# 确保这些列存在
+feature_cols = [
+    col for col in feature_cols
+    if col in df.columns
+]
+
+X = df[feature_cols]
+
+y = df['Weekly_Sales']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+model = RandomForestRegressor(
+    n_estimators=100,
+    random_state=42
+)
+
+model.fit(
+    X_train,
+    y_train
+)
+
+# Test prediction
+y_pred = model.predict(X_test)
+
+mape = mean_absolute_percentage_error(
+    y_test,
+    y_pred
+)
+
+forecast_accuracy = (
+    1 - mape
+) * 100
+
+# Save predictions for dashboard
+df['Predicted_Sales'] = model.predict(X)
+
+# Feature Importance
+importance_df = pd.DataFrame({
+    "Feature": feature_cols,
+    "Importance": model.feature_importances_
+}).sort_values(
+    "Importance",
+    ascending=False
+)
+
+# ============================================
 # Sidebar Filters
 # ============================================
 
@@ -279,16 +345,20 @@ filtered_df = df[
 
 total_sales = filtered_df['Weekly_Sales'].sum()
 
-forecast_sales = filtered_df['rolling_mean_4'].mean()
+forecast_sales = (
+    filtered_df['Predicted_Sales']
+    .mean()
+)
 
 sales_growth = (
     filtered_df['Weekly_Sales'].pct_change().mean() * 100
 )
 
 forecast_accuracy = round(
-    100 - 15.7,
+    forecast_accuracy,
     1
 )
+
 
 if len(filtered_df) > 0:
 
@@ -464,10 +534,6 @@ with right_col:
     st.subheader(t("forecast_chart"))
 
     forecast_df = filtered_df.copy()
-
-    forecast_df['Predicted_Sales'] = (
-        forecast_df['rolling_mean_4']
-    )
 
     fig_main = go.Figure()
 
