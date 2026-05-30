@@ -273,34 +273,37 @@ def train_model(df):
 
     y_pred = model.predict(X_test)
 
-    mape = mean_absolute_percentage_error(
-        y_test,
-        y_pred
-    )
+# 计算 MAPE
+mape = mean_absolute_percentage_error(
+    y_test,
+    y_pred
+)
 
-    forecast_accuracy = round(
-        (1 - mape) * 100,
-        1
-    )
+# 使用 max(0, …) 确保即使 MAPE 很大也不会出现负 Accuracy
+accuracy = max(
+    0,
+    round((1 - mape) * 100, 1)
+)
 
-    df['Predicted_Sales'] = model.predict(X)
+# 保存预测值到 DataFrame
+df['Predicted_Sales'] = model.predict(X)
 
-    importance_df = pd.DataFrame({
-        "Feature": feature_cols,
-        "Importance": model.feature_importances_
-    })
+# 特征重要性
+importance_df = pd.DataFrame({
+    "Feature": feature_cols,
+    "Importance": model.feature_importances_
+})
 
-    return (
-        df,
-        forecast_accuracy,
-        importance_df,
-        model
-    )
+return (
+    df,
+    accuracy,
+    importance_df,
+    model
+)
 # 调用模型
 df, forecast_accuracy, importance_df, model = (
     train_model(df)
 )
-
 # ============================================
 # Sidebar Filters
 # ============================================
@@ -389,8 +392,8 @@ col3.metric(
 )
 
 col4.metric(
-    "MAPE",
-    f"{forecast_accuracy}%"
+    t("forecast_accuracy"),
+    f"{forecast_accuracy:.1f}%"
 )
 
 col5.metric(
