@@ -438,7 +438,6 @@ fig_main.add_trace(
         name=t("predicted_sales")
     )
 )
-        )
     )
 
     fig_main.update_layout(
