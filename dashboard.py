@@ -147,7 +147,56 @@ left_col, right_col = st.columns([1, 2])
 # ============================================
 
 with left_col:
+st.subheader("Top 10 Stores")
 
+top_stores = (
+    filtered_df
+    .groupby('Store')['Weekly_Sales']
+    .sum()
+    .reset_index()
+    .sort_values(
+        by='Weekly_Sales',
+        ascending=False
+    )
+    .head(10)
+)
+
+fig_top = px.bar(
+    top_stores,
+    x='Store',
+    y='Weekly_Sales',
+    title='Top 10 Stores'
+)
+
+st.plotly_chart(
+    fig_top,
+    use_container_width=True
+)
+
+st.subheader("Bottom 10 Stores")
+
+bottom_stores = (
+    filtered_df
+    .groupby('Store')['Weekly_Sales']
+    .sum()
+    .reset_index()
+    .sort_values(
+        by='Weekly_Sales'
+    )
+    .head(10)
+)
+
+fig_bottom = px.bar(
+    bottom_stores,
+    x='Store',
+    y='Weekly_Sales',
+    title='Bottom 10 Stores'
+)
+
+st.plotly_chart(
+    fig_bottom,
+    use_container_width=True
+)
     st.subheader("Store Performance")
 
     store_sales = (
@@ -270,7 +319,34 @@ with right_col:
         fig_importance,
         use_container_width=True
     )
+st.subheader("Holiday Impact Analysis")
 
+holiday_sales = (
+    filtered_df
+    .groupby('IsHoliday')['Weekly_Sales']
+    .mean()
+    .reset_index()
+)
+
+holiday_sales['IsHoliday'] = (
+    holiday_sales['IsHoliday']
+    .replace({
+        False: 'Non-Holiday',
+        True: 'Holiday'
+    })
+)
+
+fig_holiday = px.bar(
+    holiday_sales,
+    x='IsHoliday',
+    y='Weekly_Sales',
+    title='Average Sales: Holiday vs Non-Holiday'
+)
+
+st.plotly_chart(
+    fig_holiday,
+    use_container_width=True
+)
 # ============================================
 # Error Distribution
 # ============================================
@@ -297,7 +373,37 @@ st.plotly_chart(
 # ============================================
 # Recommendations Section
 # ============================================
+st.subheader("Store Performance Alert")
 
+current_sales = (
+    filtered_df['Weekly_Sales']
+    .mean()
+)
+
+overall_sales = (
+    df['Weekly_Sales']
+    .mean()
+)
+
+ratio = current_sales / overall_sales
+
+if ratio >= 0.95:
+
+    st.success(
+        "🟢 Normal Performance: Sales are within expected range."
+    )
+
+elif ratio >= 0.80:
+
+    st.warning(
+        "🟡 Warning: Sales are below average and should be monitored."
+    )
+
+else:
+
+    st.error(
+        "🔴 Critical Alert: Sales are significantly below expected levels."
+    )
 st.subheader("Business Recommendations")
 
 # Recommendation logic
