@@ -291,7 +291,7 @@ def train_model(df):
         "Importance": model.feature_importances_
     })
 
-return (
+    return (
     df,
     accuracy,
     importance_df,
