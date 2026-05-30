@@ -279,7 +279,6 @@ def train_model(df):
         y_pred
     )
 
-    accuracy = (
     forecast_accuracy = round(
     mape * 100,
     2
