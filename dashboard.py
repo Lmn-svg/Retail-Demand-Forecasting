@@ -293,57 +293,75 @@ with right_col:
         fig_main,
         use_container_width=True
     )
+# ============================================
+# Feature Importance
+# ============================================
+
+st.subheader("Feature Importance")
+
+importance_df = pd.DataFrame({
+    'Feature': [
+        'rolling_mean_4',
+        'rolling_std_4',
+        'CPI',
+        'Unemployment',
+        'Fuel_Price',
+        'Temperature'
+    ],
+    'Importance': [
+        0.884,
+        0.101,
+        0.003,
+        0.002,
+        0.001,
+        0.001
+    ]
+})
+
+fig_importance = px.bar(
+    importance_df,
+    x='Feature',
+    y='Importance',
+    title='Random Forest Feature Importance'
+)
+
+st.plotly_chart(
+    fig_importance,
+    use_container_width=True
+)
+
+# ============================================
+# Holiday Impact Analysis
+# ============================================
+
 st.subheader("Holiday Impact Analysis")
 
-holiday_sales = (
+holiday_df = (
     filtered_df
     .groupby('IsHoliday')['Weekly_Sales']
     .mean()
     .reset_index()
 )
 
-holiday_sales['IsHoliday'] = (
-    holiday_sales['IsHoliday']
+holiday_df['IsHoliday'] = (
+    holiday_df['IsHoliday']
     .replace({
         False: 'Non-Holiday',
         True: 'Holiday'
     })
-    # ============================================
-    # Feature Importance
-    # ============================================
+)
 
-    st.subheader("Feature Importance")
+fig_holiday = px.bar(
+    holiday_df,
+    x='IsHoliday',
+    y='Weekly_Sales',
+    title='Average Sales: Holiday vs Non-Holiday'
+)
 
-    importance_df = pd.DataFrame({
-        'Feature': [
-            'rolling_mean_4',
-            'rolling_std_4',
-            'CPI',
-            'Unemployment',
-            'Fuel_Price',
-            'Temperature'
-        ],
-        'Importance': [
-            0.884,
-            0.101,
-            0.003,
-            0.002,
-            0.001,
-            0.001
-        ]
-    })
-
-    fig_importance = px.bar(
-        importance_df,
-        x='Feature',
-        y='Importance',
-        title='Random Forest Feature Importance'
-    )
-
-    st.plotly_chart(
-        fig_importance,
-        use_container_width=True
-    )
+st.plotly_chart(
+    fig_holiday,
+    use_container_width=True
+)
 
 )
 
