@@ -429,7 +429,12 @@ with right_col:
         name=t("actual_sales")
         )
     )
-
+    fig_main.update_layout(
+        title=t("sales forecasting"),
+        xaxis_title='Date',
+        yaxis_title='Weekly_Sales',  
+    )
+    
     fig_main.add_trace(
     go.Scatter(
         x=forecast_df['Date'],
