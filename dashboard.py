@@ -280,7 +280,7 @@ def train_model(df):
     )
 
 # 使用 max(0, …) 确保即使 MAPE 很大也不会出现负 Accuracy
-   accuracy = max(
+accuracy = max(
     0,
     round((1 - mape) * 100, 1)
 )
