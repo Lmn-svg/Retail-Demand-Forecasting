@@ -422,28 +422,22 @@ with right_col:
     fig_main = go.Figure()
 
     fig_main.add_trace(
-        go.Scatter(
-             x=forecast_df['Date'],
-             y=forecast_df['Weekly_Sales'],
-             mode='lines',
-             name=t("actual_sales"),
-             labels={
-             "Date": t("date"),
-             "Weekly_Sales": t("Weekly_sales")
-             }
-        )
+    go.Scatter(
+        x=forecast_df['Date'],
+        y=forecast_df['Weekly_Sales'],
+        mode='lines',
+        name=t("actual_sales")
     )
+)
 
-    fig_main.add_trace(
-        go.Scatter(
-            x=forecast_df['Date'],
-            y=forecast_df['Predicted Sales'],
-            mode='lines',
-            name=t("predicted_sales"),
-            labels={
-            "Date": t("date"),
-            "Predicted Sales": t("predicted_sales")
-            }
+fig_main.add_trace(
+    go.Scatter(
+        x=forecast_df['Date'],
+        y=forecast_df['Predicted_Sales'],
+        mode='lines',
+        name=t("predicted_sales")
+    )
+)
         )
     )
 
@@ -453,7 +447,7 @@ with right_col:
         yaxis_title='Weekly_Sales',
         labels={
         "Date": t("date"),
-        "Weekly_Sales": t("Weekly_sales")
+        "Weekly_Sales": t("Weekly sales")
         }
     )
 
