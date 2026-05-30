@@ -33,6 +33,10 @@ with col_lang:
 translations = {
 
     "English": {
+
+        "store": "Store",
+        
+        "Weekly_sales": "Weekly sales",
         
 
         "Introduction":
@@ -81,6 +85,9 @@ translations = {
     },
 
     "中文": {
+
+        "store": "店铺",
+        "Weekly_sales": "周销售额",
         
         "Introduction":
         "此仪表板使用随机森林预测模型提供零售销售监控、预测见解和业务建议。",
@@ -283,9 +290,9 @@ with left_col:
 
     fig_top = px.bar(
         top_stores,
-        x='Store',
-        y='Weekly_Sales',
-        title='Top 10 Stores'
+        x=t("store"),
+        y=t("Weekly_sales"),
+        title=t("top10")
     )
 
     st.plotly_chart(
@@ -309,8 +316,8 @@ with left_col:
 
     fig_bottom = px.bar(
         bottom_stores,
-        x='Store',
-        y='Weekly_Sales',
+        x=t("store"),
+        y=t("Weekly_sales"),
         title=t("bottom10")
     )
 
