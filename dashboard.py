@@ -442,10 +442,7 @@ holiday_df = (
     .reset_index()
 )
 
-holiday_df['IsHoliday'] = (
-    holiday_df['IsHoliday']
-    .replace({
-        if language == "中文":
+if language == "中文":
 
     holiday_df['IsHoliday'] = (
         holiday_df['IsHoliday']
@@ -464,9 +461,13 @@ else:
             True: 'Holiday'
         })
     )
-    })
-)
 
+fig_holiday = px.bar(
+    holiday_df,
+    x='IsHoliday',
+    y='Weekly_Sales',
+    title=t("holiday_analysis")
+)
 fig_holiday = px.bar(
     holiday_df,
     x='IsHoliday',
