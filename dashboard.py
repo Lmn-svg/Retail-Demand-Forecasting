@@ -33,7 +33,10 @@ with col_lang:
 translations = {
 
     "English": {
-
+        "date": "Date",
+        "feature": "Feature",
+        "importance": "Importance" ,
+        "month": "Month",
         "store": "Store",
         
         "Weekly_sales": "Weekly sales",
@@ -55,6 +58,9 @@ translations = {
 
         "kpi": "Key Performance Indicators",
 
+        "sales forecasting":"Sales Forecasting",
+        "predicted_sales": "Predicted Sales",
+        "actual_sales": "Actual Sales",
         "total_sales": "Total Sales",
         "forecast_sales": "Forecasted Sales",
         "sales_growth": "Sales Growth",
@@ -79,13 +85,20 @@ translations = {
         "average sales": "Average Monthly Sales",
 
         "sales by store": "Sales by Store",
+
+        "average sales: holiday vs nonholiday": "Average Sales: Holiday vs Non-Holiday",
         
+        "random forest feature importance": "Random Forest Feature Importance",
         "footer":
         "Retail Demand Forecasting Dashboard\nPowered by Random Forest Forecasting Model"
     },
 
     "中文": {
 
+         "date": "日期",
+        "feature": "特征",
+        "importance": "重要性" ,
+         "month": "月份",
         "store": "店铺",
         "Weekly_sales": "周销售额",
         
@@ -104,6 +117,9 @@ translations = {
 
         "kpi": "关键绩效指标",
 
+        "sales forecasting":"销售预测",
+        "predicted_sales": "预测销售额",
+        "actual_sales": "实际销售额",
         "total_sales": "总销售额",
         "forecast_sales": "预测销售额",
         "sales_growth": "销售增长率",
@@ -128,7 +144,10 @@ translations = {
         "business_rec": "商业建议",
 
         "sales by store": "店铺销售额",
-        
+
+        "average sales: holiday vs nonholiday":"平均销售额：假日与非假日",
+
+        "random forest feature importance": "随机森林特征重要性",
         "footer":
         "零售需求预测仪表盘\n基于随机森林预测模型"
     }
@@ -346,7 +365,11 @@ with left_col:
         store_sales,
         x='Store',
         y='Weekly_Sales',
-        title='Sales by store'
+        title=t("sales by store"),
+        labels={
+        "Store": t("store"),
+        "Weekly_Sales": t("Weekly_sales")
+        }
     )
 
     st.plotly_chart(
@@ -367,7 +390,11 @@ with left_col:
         x='Month',
         y='Weekly_Sales',
         markers=True,
-        title=t("average sales")
+        title=t("average sales"),
+        labels={
+        "Month": t("month"),
+        "Weekly_Sales": t("Weekly_sales")
+        }
     )
 
     st.plotly_chart(
@@ -392,27 +419,39 @@ with right_col:
     fig_main = go.Figure()
 
     fig_main.add_trace(
-        go.Scatter(
-            x=forecast_df['Date'],
-            y=forecast_df['Weekly_Sales'],
-            mode='lines',
-            name='Actual Sales'
-        )
+    go.Scatter(
+       x=forecast_df['Date'],
+       y=forecast_df['Weekly_Sales'],
+       mode='lines',
+       name=t("actual_sales"),
+       labels={
+       "Date": t("date"),
+       "Weekly_Sales": t("Weekly_sales")
+       }
+)
     )
 
     fig_main.add_trace(
         go.Scatter(
             x=forecast_df['Date'],
-            y=forecast_df['Predicted_Sales'],
+            y=forecast_df['Predicted Sales'],
             mode='lines',
-            name='Predicted Sales'
+            name=t("predicted_sales"),
+            labels={
+            "Date": t("date"),
+            "Predicted Sales": t("predicted_sales")
+            }
         )
     )
 
     fig_main.update_layout(
-        title='Sales Forecasting',
+        title=t("sales forecasting"),
         xaxis_title='Date',
-        yaxis_title='Weekly Sales'
+        yaxis_title='Weekly_Sales',
+        labels={
+        "Date": t("date"),
+        "Weekly_Sales": t("Weekly_sales")
+        }
     )
 
     st.plotly_chart(
@@ -448,7 +487,11 @@ fig_importance = px.bar(
     importance_df,
     x='Feature',
     y='Importance',
-    title='Random Forest Feature Importance'
+    title=t("random forest feature importance")66666666666666666666666666
+    labels={
+    "Feature": t("feature"),
+    "Importance": t("importance")
+        }
 )
 
 st.plotly_chart(
@@ -499,7 +542,7 @@ fig_holiday = px.bar(
     holiday_df,
     x='IsHoliday',
     y='Weekly_Sales',
-    title='Average Sales: Holiday vs Non-Holiday'
+    title=t("Average Sales: Holiday vs Non-Holiday")6666666666666666666666666666666666
 )
 
 st.plotly_chart(
