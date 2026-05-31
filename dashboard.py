@@ -208,7 +208,6 @@ translations = {
    
 }
     }
-}
 def t(key):
     return translations[language].get(key, key)
 # ============================================
