@@ -247,7 +247,7 @@ df = load_data()
 @st.cache_resource
 def train_model(df):
 
-    # --- 增加时间特征 ---
+
     df = df.copy()
     df['Year'] = df['Date'].dt.year
     df['Month'] = df['Date'].dt.month
@@ -270,29 +270,29 @@ def train_model(df):
     X = df[feature_cols]
     y = df['Weekly_Sales']
 
-    # --- 时间切分训练/测试 ---
+    # --- Time segmentation training/testing ---
     split_index = int(len(df) * 0.8)
     X_train, X_test = X.iloc[:split_index], X.iloc[split_index:]
     y_train, y_test = y.iloc[:split_index], y.iloc[split_index:]
 
-    # --- 随机森林训练 ---
+    # --- Random Forest Training ---
     model = RandomForestRegressor(
         n_estimators=100,
         random_state=42
     )
     model.fit(X_train, y_train)
 
-    # --- 测试预测 ---
+    # ---Test prediction ---
     y_pred = model.predict(X_test)
 
-    # --- 计算 MAPE ---
+    # --- calculate MAPE ---
     mape = mean_absolute_percentage_error(y_test, y_pred)
     forecast_accuracy = max(0, round((1 - mape) * 100, 1))  # 保证不为负数
 
-    # --- 对整个数据生成预测值 ---
+    # --- Generate predicted values for the entire data ---
     df['Predicted_Sales'] = model.predict(X)
 
-    # --- 特征重要性 ---
+    # --- feature importance ---
     importance_df = pd.DataFrame({
         "Feature": feature_cols,
         "Importance": model.feature_importances_
