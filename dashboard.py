@@ -124,7 +124,7 @@ translations = {
      "Sales volatility is currently high. Monitor demand fluctuations carefully.",
         "active_stores": "Active Stores",
 },
-    },
+    
 
     "中文": {
 
