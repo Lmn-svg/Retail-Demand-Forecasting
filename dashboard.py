@@ -237,11 +237,17 @@ def load_data():
 df = load_data()
 
 # ============================================
-# Train Model
+# Train Model - Corrected Version
 # ============================================
 
 @st.cache_resource
 def train_model(df):
+
+    # --- 增加时间特征 ---
+    df = df.copy()
+    df['Year'] = df['Date'].dt.year
+    df['Month'] = df['Date'].dt.month
+    df['Week'] = df['Date'].dt.isocalendar().week.astype(int)
 
     feature_cols = [
         'Store',
@@ -251,83 +257,54 @@ def train_model(df):
         'Unemployment',
         'IsHoliday',
         'rolling_mean_4',
-        'rolling_std_4'
+        'rolling_std_4',
+        'Year',
+        'Month',
+        'Week'
     ]
 
     X = df[feature_cols]
-
     y = df['Weekly_Sales']
 
-    split_index = int(
-        len(df) * 0.8
-    )
+    # --- 时间切分训练/测试 ---
+    split_index = int(len(df) * 0.8)
+    X_train, X_test = X.iloc[:split_index], X.iloc[split_index:]
+    y_train, y_test = y.iloc[:split_index], y.iloc[split_index:]
 
-    X_train = X.iloc[:split_index]
-    X_test = X.iloc[split_index:]
-
-    y_train = y.iloc[:split_index]
-    y_test = y.iloc[split_index:]
-
+    # --- 随机森林训练 ---
     model = RandomForestRegressor(
         n_estimators=100,
         random_state=42
     )
+    model.fit(X_train, y_train)
 
-    model.fit(
-        X_train,
-        y_train
-    )
+    # --- 测试预测 ---
+    y_pred = model.predict(X_test)
 
-    y_pred = model.predict(
-        X_test
-    )
+    # --- 计算 MAPE ---
+    mape = mean_absolute_percentage_error(y_test, y_pred)
+    forecast_accuracy = max(0, round((1 - mape) * 100, 1))  # 保证不为负数
 
-    mape = mean_absolute_percentage_error(
-        y_test,
-        y_pred
-    )
+    # --- 对整个数据生成预测值 ---
+    df['Predicted_Sales'] = model.predict(X)
 
-    accuracy = max(
-        0,
-        round(
-            (1 - mape) * 100,
-            1
-        )
-    )
-
-    # 关键步骤
-    df = df.copy()
-
-    df['Predicted_Sales'] = (
-        model.predict(X)
-    )
-
+    # --- 特征重要性 ---
     importance_df = pd.DataFrame({
         "Feature": feature_cols,
         "Importance": model.feature_importances_
-    })
+    }).sort_values(by="Importance", ascending=False)
 
-    return (
-        df,
-        accuracy,
-        importance_df,
-        model
-    )
+    return df, forecast_accuracy, importance_df, model, mape
 
 
 # ============================================
 # Run Model
 # ============================================
 
-df, forecast_accuracy, importance_df, model = (
-    train_model(df)
-)
+df, forecast_accuracy, importance_df, model, mape = train_model(df)
 
-# 调试用（确认列存在）
-st.write(
-    "Predicted_Sales Exists:",
-    'Predicted_Sales' in df.columns
-)
+st.write(f"Raw MAPE: {mape*100:.2f}%")
+st.write(f"Forecast Accuracy: {forecast_accuracy:.1f}%")
 
 # ============================================
 # Sidebar Filters
