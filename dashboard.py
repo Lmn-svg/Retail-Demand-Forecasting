@@ -237,24 +237,18 @@ def load_data():
 df = load_data()
 
 # ============================================
-# Enhanced Train Model
+# Train Model - Corrected Version
 # ============================================
 
 @st.cache_resource
 def train_model(df):
-    df = df.copy()
 
-    # --- 时间特征 ---
+    # --- 增加时间特征 ---
+    df = df.copy()
     df['Year'] = df['Date'].dt.year
     df['Month'] = df['Date'].dt.month
     df['Week'] = df['Date'].dt.isocalendar().week.astype(int)
-    df['DayOfWeek'] = df['Date'].dt.dayofweek
 
-    # --- 填充缺失值 ---
-    df['rolling_mean_4'] = df['rolling_mean_4'].fillna(0)
-    df['rolling_std_4'] = df['rolling_std_4'].fillna(0)
-
-    # --- 特征列 ---
     feature_cols = [
         'Store',
         'Temperature',
@@ -266,29 +260,30 @@ def train_model(df):
         'rolling_std_4',
         'Year',
         'Month',
-        'Week',
-        'DayOfWeek'
+        'Week'
     ]
 
     X = df[feature_cols]
     y = df['Weekly_Sales']
 
-    # --- 按日期排序切分训练/测试集 ---
-    df = df.sort_values('Date')
+    # --- 时间切分训练/测试 ---
     split_index = int(len(df) * 0.8)
     X_train, X_test = X.iloc[:split_index], X.iloc[split_index:]
     y_train, y_test = y.iloc[:split_index], y.iloc[split_index:]
 
-    # --- 训练随机森林 ---
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    # --- 随机森林训练 ---
+    model = RandomForestRegressor(
+        n_estimators=100,
+        random_state=42
+    )
     model.fit(X_train, y_train)
 
     # --- 测试预测 ---
     y_pred = model.predict(X_test)
 
-    # --- 计算 MAPE 和 Forecast Accuracy ---
+    # --- 计算 MAPE ---
     mape = mean_absolute_percentage_error(y_test, y_pred)
-    forecast_accuracy = max(0, round((1 - mape) * 100, 1))
+    forecast_accuracy = max(0, round((1 - mape) * 100, 1))  # 保证不为负数
 
     # --- 对整个数据生成预测值 ---
     df['Predicted_Sales'] = model.predict(X)
@@ -297,9 +292,10 @@ def train_model(df):
     importance_df = pd.DataFrame({
         "Feature": feature_cols,
         "Importance": model.feature_importances_
-    }).sort_values(by='Importance', ascending=False)
+    }).sort_values(by="Importance", ascending=False)
 
     return df, forecast_accuracy, importance_df, model, mape
+
 
 # ============================================
 # Run Model
