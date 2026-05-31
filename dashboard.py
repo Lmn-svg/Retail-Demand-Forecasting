@@ -240,13 +240,19 @@ def load_data():
 
 df = load_data()
 
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
-from sklearn.metrics import mean_absolute_percentage_error
-import pandas as pd
+# ============================================
+# Train Model - Corrected Version
+# ============================================
 
 @st.cache_resource
 def train_model(df):
+
+    # --- 增加时间特征 ---
+    df = df.copy()
+    df['Year'] = df['Date'].dt.year
+    df['Month'] = df['Date'].dt.month
+    df['Week'] = df['Date'].dt.isocalendar().week.astype(int)
+
     feature_cols = [
         'Store',
         'Temperature',
@@ -255,57 +261,45 @@ def train_model(df):
         'Unemployment',
         'IsHoliday',
         'rolling_mean_4',
-        'rolling_std_4'
+        'rolling_std_4',
+        'Year',
+        'Month',
+        'Week'
     ]
 
     X = df[feature_cols]
     y = df['Weekly_Sales']
 
-    # 时间序列分割
+    # --- 时间切分训练/测试 ---
     split_index = int(len(df) * 0.8)
-    X_train = X.iloc[:split_index]
-    X_test  = X.iloc[split_index:]
-    y_train = y.iloc[:split_index]
-    y_test  = y.iloc[split_index:]
+    X_train, X_test = X.iloc[:split_index], X.iloc[split_index:]
+    y_train, y_test = y.iloc[:split_index], y.iloc[split_index:]
 
-    # GridSearchCV 参数设置
-    param_grid = {
-        'n_estimators': [100, 200],
-        'max_depth': [5, 10, None],
-        'min_samples_split': [2, 5],
-        'min_samples_leaf': [1, 2]
-    }
-
-    # 使用 TimeSeriesSplit 防止时间序列泄漏
-    tscv = TimeSeriesSplit(n_splits=5)
-
-    grid_search = GridSearchCV(
-        estimator=RandomForestRegressor(random_state=42),
-        param_grid=param_grid,
-        cv=tscv,
-        scoring='neg_mean_absolute_error',
-        n_jobs=-1
+    # --- 随机森林训练 ---
+    model = RandomForestRegressor(
+        n_estimators=100,
+        random_state=42
     )
+    model.fit(X_train, y_train)
 
-    # 训练模型
-    grid_search.fit(X_train, y_train)
-    model = grid_search.best_estimator_
+    # --- 测试预测 ---
+    y_pred = model.predict(X_test)
 
-    # 预测
-    y_pred_test = model.predict(X_test)
-    mape = mean_absolute_percentage_error(y_test, y_pred_test)
-    forecast_accuracy = round((1 - mape) * 100, 1)
+    # --- 计算 MAPE ---
+    mape = mean_absolute_percentage_error(y_test, y_pred)
+    forecast_accuracy = max(0, round((1 - mape) * 100, 1))  # 保证不为负数
 
-    # 对全数据集生成预测列
+    # --- 对整个数据生成预测值 ---
     df['Predicted_Sales'] = model.predict(X)
 
-    # 特征重要性
+    # --- 特征重要性 ---
     importance_df = pd.DataFrame({
         "Feature": feature_cols,
         "Importance": model.feature_importances_
     }).sort_values(by="Importance", ascending=False)
 
-    return df, forecast_accuracy, importance_df, model
+    return df, forecast_accuracy, importance_df, model, mape
+
 
 # ============================================
 # Run Model
