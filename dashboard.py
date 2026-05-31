@@ -307,8 +307,6 @@ def train_model(df):
 
 df, forecast_accuracy, importance_df, model, mape = train_model(df)
 
-st.write(f"Raw MAPE: {mape*100:.2f}%")
-st.write(f"Forecast Accuracy: {forecast_accuracy:.1f}%")
 
 # ============================================
 # Sidebar Filters
