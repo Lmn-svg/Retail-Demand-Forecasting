@@ -122,6 +122,7 @@ translations = {
 
      "volatility_recommendation":
      "Sales volatility is currently high. Monitor demand fluctuations carefully.",
+        "holiday_impact": "Holiday Impact",
     },
 
     "中文": {
@@ -203,6 +204,9 @@ translations = {
 
        "volatility_recommendation":
        "当前销售波动较大，建议密切监控需求变化。",
+        "holiday_impact": "节假日影响"
+   
+}
     }
 }
 def t(key):
@@ -376,6 +380,29 @@ sales_growth = (
     * 100
 )
 
+# Holiday Impact KPI
+
+holiday_sales = (
+    filtered_df[
+        filtered_df['IsHoliday'] == True
+    ]['Weekly_Sales']
+    .mean()
+)
+
+nonholiday_sales = (
+    filtered_df[
+        filtered_df['IsHoliday'] == False
+    ]['Weekly_Sales']
+    .mean()
+)
+
+if nonholiday_sales > 0:
+    holiday_impact = (
+        holiday_sales /
+        nonholiday_sales
+    )
+else:
+    holiday_impact = 0
 if len(filtered_df) > 0:
 
     top_store = (
@@ -418,8 +445,8 @@ col3.metric(
 )
 
 col4.metric(
-    t("forecast_accuracy"),
-    f"{forecast_accuracy:.1f}%"
+    "Holiday Impact",
+    f"{holiday_impact:.2f}x"
 )
 
 col5.metric(
