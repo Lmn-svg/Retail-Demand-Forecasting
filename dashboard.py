@@ -234,6 +234,7 @@ def load_data():
 
 
 df = load_data()
+
 # ============================================
 # Train Model
 # ============================================
@@ -293,6 +294,9 @@ def train_model(df):
         )
     )
 
+    # 关键步骤
+    df = df.copy()
+
     df['Predicted_Sales'] = (
         model.predict(X)
     )
@@ -308,9 +312,22 @@ def train_model(df):
         importance_df,
         model
     )
-    df, forecast_accuracy, importance_df, model = (
+
+
+# ============================================
+# Run Model
+# ============================================
+
+df, forecast_accuracy, importance_df, model = (
     train_model(df)
 )
+
+# 调试用（确认列存在）
+st.write(
+    "Predicted_Sales Exists:",
+    'Predicted_Sales' in df.columns
+)
+
 # ============================================
 # Sidebar Filters
 # ============================================
@@ -342,16 +359,23 @@ sales_threshold = st.sidebar.slider(
     ),
     value=10000
 )
+
 # ============================================
 # Filter Dataset
 # ============================================
 
-filtered_df = df[
+filtered_df = df.loc[
     (df['Store'].isin(selected_store)) &
     (df['Date'] >= pd.to_datetime(date_range[0])) &
     (df['Date'] <= pd.to_datetime(date_range[1])) &
     (df['Weekly_Sales'] >= sales_threshold)
-]
+].copy()
+
+# 调试用
+st.write(
+    "Filtered Has Predicted:",
+    'Predicted_Sales' in filtered_df.columns
+)
 
 # ============================================
 # KPI Calculations
@@ -387,6 +411,7 @@ if len(filtered_df) > 0:
 else:
 
     top_store = "N/A"
+
 # ============================================
 # KPI Section
 # ============================================
@@ -423,12 +448,6 @@ col5.metric(
     t("top_store"),
     f"Store {top_store}"
 )
-
-# ============================================
-# Main Layout
-# ============================================
-
-left_col, right_col = st.columns([1, 2])
 
 # ============================================
 # Left Side Charts
