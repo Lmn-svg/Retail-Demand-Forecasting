@@ -500,10 +500,6 @@ with left_col:
         use_container_width=True
     )
 
-    st.plotly_chart(
-        fig_bar,
-        use_container_width=True
-    )
 
     st.subheader(t("monthly_sales"))
 
