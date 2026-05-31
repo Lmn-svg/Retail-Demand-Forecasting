@@ -205,9 +205,9 @@ translations = {
 
        "volatility_recommendation":
        "当前销售波动较大，建议密切监控需求变化。",
-        "active_stores": "活跃门店数"
-},
-  }
+        "active_stores": "活跃门店数",
+    },
+}
    
 def t(key):
     return translations[language].get(key, key)
