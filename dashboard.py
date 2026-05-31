@@ -355,12 +355,6 @@ filtered_df = df.loc[
     (df['Weekly_Sales'] >= sales_threshold)
 ].copy()
 
-# 调试用
-st.write(
-    "Filtered Has Predicted:",
-    'Predicted_Sales' in filtered_df.columns
-)
-
 # ============================================
 # KPI Calculations
 # ============================================
@@ -504,25 +498,6 @@ with left_col:
     st.plotly_chart(
         fig_bottom,
         use_container_width=True
-    )
-
-    st.subheader(t("store_performance"))
-
-    store_sales = (
-        filtered_df.groupby('Store')['Weekly_Sales']
-        .sum()
-        .reset_index()
-    )
-
-    fig_bar = px.bar(
-        store_sales,
-        x='Store',
-        y='Weekly_Sales',
-        title=t("sales by store"),
-        labels={
-        "Store": t("store"),
-        "Weekly_Sales": t("Weekly_sales")
-        }
     )
 
     st.plotly_chart(
