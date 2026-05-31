@@ -307,7 +307,6 @@ def train_model(df):
 
 df, forecast_accuracy, importance_df, model, mape = train_model(df)
 
-st.sidebar.markdown("<br><br>", unsafe_allow_html=True)
 
 # ============================================
 # Sidebar Filters
@@ -323,6 +322,8 @@ selected_store = st.sidebar.multiselect(
     default=sorted(df['Store'].unique())[:5]
 )
 
+
+st.sidebar.markdown("<br><br>", unsafe_allow_html=True)
 min_date = df['Date'].min()
 
 max_date = df['Date'].max()
