@@ -19,6 +19,13 @@ st.set_page_config(
     page_title="Retail Demand Forecasting Dashboard",
     layout="wide"
 )
+st.markdown("""
+<style>
+section[data-testid="stSidebar"] {
+    width: 400px !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ============================================
 # Language Selector
