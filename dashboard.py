@@ -229,6 +229,7 @@ def load_data():
     df['Date'] = pd.to_datetime(
         df['Date']
     )
+    df['Month'] = df['Date'].dt.month
 
     return df
 
