@@ -208,7 +208,6 @@ translations = {
         "active_stores": "活跃门店数",
 },
    
-}
     }
 def t(key):
     return translations[language].get(key, key)
