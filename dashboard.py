@@ -126,7 +126,7 @@ translations = {
 },
     },
 
-"中文": {
+    "中文": {
 
         "isholiday":"是假期",
          "date": "日期",
