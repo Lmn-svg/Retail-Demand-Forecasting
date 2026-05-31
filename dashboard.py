@@ -19,13 +19,6 @@ st.set_page_config(
     page_title="Retail Demand Forecasting Dashboard",
     layout="wide"
 )
-st.markdown("""
-<style>
-section[data-testid="stSidebar"] {
-    width: 400px !important;
-}
-</style>
-""", unsafe_allow_html=True)
 
 # ============================================
 # Language Selector
@@ -335,8 +328,10 @@ min_date = df['Date'].min()
 
 max_date = df['Date'].max()
 
-date_range = st.sidebar.date_input(
-    t("select_date"),
+st.subheader(t("select_date"))
+
+date_range = st.date_input(
+    "",
     [min_date, max_date]
 )
 
