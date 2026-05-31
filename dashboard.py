@@ -122,6 +122,8 @@ translations = {
 
      "volatility_recommendation":
      "Sales volatility is currently high. Monitor demand fluctuations carefully.",
+        "active_stores": "Active Stores",
+},
     },
 
     "中文": {
@@ -203,6 +205,8 @@ translations = {
 
        "volatility_recommendation":
        "当前销售波动较大，建议密切监控需求变化。",
+        "active_stores": "活跃门店数",
+},
    
 }
     }
